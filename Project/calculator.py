@@ -107,8 +107,9 @@ class SmartCalculator:
             self.stack.append(self.operators.pop())
         return self.postfix_to_answer(list(self.stack))
 
+
+#TODO: Sometimes 2+2 explodes, I need to fix that.
     def postfix_to_answer(self, postfix: list) -> int or str:
-        print(postfix)
         for n in postfix:
             if n.isalnum():
                 self.stack.append(n)
