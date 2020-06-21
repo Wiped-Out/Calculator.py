@@ -27,13 +27,13 @@ class SmartCalculator:
                 print(self.commands(op))
             elif any(x in op for x in self.op.keys()) and '=' not in op:
                 print(self.check_operators(op))
-            elif '=' in op:
+            elif op.count('=') == 1:
                 self.store_var(op)
                 continue
             elif op:
                 if self.var_in_dict(op):
                     print(self.get_var(op))
-                elif op.isalpha():
+                elif op.strip().isalpha():
                     print('Unknown variable')
                 else:
                     print('Invalid identifier')
@@ -66,7 +66,7 @@ class SmartCalculator:
             return
         elif (var[1].isalpha() or var[1].isnumeric()) and len(var) >= 2:
             if any(x in var[1:] for x in self.op):
-                self.variables[var[0]] = self.check_operators(' '.join(var[1:]))
+                self.variables[var[0]] = str(self.check_operators(' '.join(var[1:])))
             else:
                 self.variables[var[0]] = self.get_var(var[1])
         else:
@@ -108,6 +108,7 @@ class SmartCalculator:
         return self.postfix_to_answer(list(self.stack))
 
     def postfix_to_answer(self, postfix: list) -> int or str:
+        print(postfix)
         for n in postfix:
             if n.isalnum():
                 self.stack.append(n)
@@ -118,11 +119,11 @@ class SmartCalculator:
                         a = self.stack.pop()
                         x = str(eval(f'{a}{n}{b}'))
                         self.stack.append(x)
-                except (SyntaxError, NameError):
-                    return 'Unknown variable'
+                except (SyntaxError):
+                    return 'Invalid expression'
         result = float(self.stack[-1])
         return int(result)
-
+# SyntaxError, NameError
 
 calc = SmartCalculator()
 calc.main()
